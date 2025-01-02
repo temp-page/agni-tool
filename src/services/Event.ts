@@ -1,0 +1,3 @@
+export const EVENT_CONNECT = 'EVENT_CONNECT'
+export const EVENT_DISCONNECT = 'EVENT_DISCONNECT'
+export const EVENT_SEND_TX = 'EVENT_SEND_TX'
