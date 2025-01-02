@@ -162,7 +162,7 @@ async function claimSubmit(item: FeeDetail) {
   <WalletButton></WalletButton>
 
   <el-button @click="initData">刷新数据</el-button>
-  <el-table border :data="feeData" :loading="loading" stripe style="width: 100%">
+  <el-table border :data="feeData" v-loading="loading" stripe style="width: 100%">
     <el-table-column label="id" prop="id" fixed></el-table-column>
     <el-table-column label="name" prop="name" fixed></el-table-column>
     <el-table-column label="feeProtocol0" prop="feeProtocol0" sortable></el-table-column>
