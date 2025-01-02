@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {  reactive } from 'vue'
+import { reactive } from 'vue'
 import {
   ConnectorNames,
   SdkProvider,
@@ -14,7 +14,7 @@ import type { AbsMetaMaskProvider } from 'ether-sdk/lib/wallet/MetaMaskProvider'
 import { EVENT_CONNECT, EVENT_DISCONNECT, EVENT_SEND_TX, type HomeChain } from '@/services'
 import { walletConnectProvider } from '@/services/wallet/WalletConnectProvider'
 import { WalletProvider } from '@/services/wallet/WalletProvider'
-import { showToast,Notify ,Loading} from 'vant'
+import { showToast, Notify, Loading } from 'vant'
 
 defineProps<{
   className?: string
@@ -57,8 +57,8 @@ eventBus.resetOn(EVENT_CONNECT, () => {
 eventBus.resetOn(EVENT_DISCONNECT, () => {
   disconnect()
 })
-eventBus.resetOn(EVENT_SEND_TX, (args) => {
-  sendTx(...args)
+eventBus.resetOn(EVENT_SEND_TX, ([func, successCallback]) => {
+  sendTx(func, successCallback)
 })
 
 const tempWalletInfo = store.state.walletInfo
@@ -100,10 +100,7 @@ async function sendTx(
 </script>
 
 <template>
-  <div
-    v-if="store.state.walletConnect === 'unlink'"
-    class="flex justify-center align-center"
-  >
+  <div v-if="store.state.walletConnect === 'unlink'" class="flex justify-center align-center">
     <el-button @click="showConnect()">链接钱包</el-button>
   </div>
   <div v-else class="flex justify-center align-center" style="margin-top: 10px">

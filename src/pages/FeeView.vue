@@ -89,7 +89,7 @@ async function initData() {
     )
 
     const saveData = data
-      .map((c, index) => {
+      .map((c: any, index: number) => {
         const fee = new BigNumber(pools[index].feeTier).div(1e4).toFixed()
         return {
           id: pools[index].id,
@@ -97,10 +97,10 @@ async function initData() {
           token1: pools[index].token1,
           fee: fee,
           feeProtocol0: new BigNumber(c.fee.token0)
-            .div(10 ** pools[index].token0.decimals)
+            .div(10 ** parseInt(pools[index].token0.decimals, 10))
             .toFixed(),
           feeProtocol1: new BigNumber(c.fee.token1)
-            .div(10 ** pools[index].token1.decimals)
+            .div(10 ** parseInt(pools[index].token1.decimals, 10))
             .toFixed(),
           feeUsd: new BigNumber(c.fee.token0)
             .div(10 ** pools[index].token0.decimals)
@@ -113,9 +113,9 @@ async function initData() {
             .dp(2, BigNumber.ROUND_DOWN)
             .toNumber(),
           name: pools[index].token0.symbol + '-' + pools[index].token1.symbol + '-' + fee + '%',
-        }
+        } as FeeDetail
       })
-      .sort((a, b) => {
+      .sort((a: FeeDetail, b: FeeDetail) => {
         return new BigNumber(b.feeUsd).comparedTo(a.feeUsd)
       })
     feeData.value = saveData
@@ -142,8 +142,12 @@ async function claimSubmit(item: FeeDetail) {
       return agniFactoryContract.collectProtocol(
         item.id,
         store.state.walletInfo.walletAddress,
-        new BigNumber(item.feeProtocol0).multipliedBy(10 ** item.token0.decimals).toFixed(0,BigNumber.ROUND_DOWN),
-        new BigNumber(item.feeProtocol1).multipliedBy(10 ** item.token1.decimals).toFixed(0,BigNumber.ROUND_DOWN),
+        new BigNumber(item.feeProtocol0)
+          .multipliedBy(10 ** item.token0.decimals)
+          .toFixed(0, BigNumber.ROUND_DOWN),
+        new BigNumber(item.feeProtocol1)
+          .multipliedBy(10 ** item.token1.decimals)
+          .toFixed(0, BigNumber.ROUND_DOWN),
       )
     },
     async () => {
