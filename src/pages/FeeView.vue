@@ -30,7 +30,7 @@ interface FeeDetail {
   fee: string
   feeProtocol0: string
   feeProtocol1: string
-  feeUsd: string
+  feeUsd: number
 }
 
 const feeData = ref<FeeDetail[]>([])
@@ -103,11 +103,11 @@ async function initData() {
             .div(10 ** parseInt(pools[index].token1.decimals, 10))
             .toFixed(),
           feeUsd: new BigNumber(c.fee.token0)
-            .div(10 ** pools[index].token0.decimals)
+            .div(10 **  parseInt(pools[index].token0.decimals, 10))
             .multipliedBy(pools[index].token0.derivedUSD)
             .plus(
               new BigNumber(c.fee.token1)
-                .div(10 ** pools[index].token1.decimals)
+                .div(10 **  parseInt(pools[index].token1.decimals, 10))
                 .multipliedBy(pools[index].token1.derivedUSD),
             )
             .dp(2, BigNumber.ROUND_DOWN)
@@ -141,12 +141,12 @@ async function claimSubmit(item: FeeDetail) {
       const agniFactoryContract = connect.create(AgniFactoryContract)
       return agniFactoryContract.collectProtocol(
         item.id,
-        store.state.walletInfo.walletAddress,
+        store.state.walletInfo.walletAddress as string,
         new BigNumber(item.feeProtocol0)
-          .multipliedBy(10 ** item.token0.decimals)
+          .multipliedBy(10 ** parseInt(item.token0.decimals,10))
           .toFixed(0, BigNumber.ROUND_DOWN),
         new BigNumber(item.feeProtocol1)
-          .multipliedBy(10 ** item.token1.decimals)
+          .multipliedBy(10 **  parseInt(item.token1.decimals,10))
           .toFixed(0, BigNumber.ROUND_DOWN),
       )
     },

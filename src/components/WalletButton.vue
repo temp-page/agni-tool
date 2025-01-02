@@ -89,7 +89,7 @@ async function sendTx(
     await successCallback()
     showToast('Transaction submitted successfully')
     return transactionEvent
-  } catch (e) {
+  } catch (e:any) {
     console.error(e)
     showToast('ERROR：' + (e.message || e))
     throw e
